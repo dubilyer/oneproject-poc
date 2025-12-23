@@ -1,0 +1,172 @@
+{
+  "workPackagesLink": [
+    {
+      "selector": "page.getByRole('link', { name: /Work packages/ })",
+      "confidence": 95,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('#work_packages-wrapper').getByRole('link', { name: 'Work packages' })",
+      "confidence": 82,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('a.work-packages-menu-item')",
+      "confidence": 78,
+      "strategy": "css"
+    },
+    {
+      "selector": "page.locator('a').filter({ hasText: /^Work packages$/ })",
+      "confidence": 74,
+      "strategy": "locator"
+    }
+  ],
+  "createButton": [
+    {
+      "selector": "page.getByRole('button', { name: /Create new work package/ })",
+      "confidence": 96,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('button.button.-primary')",
+      "confidence": 80,
+      "strategy": "css"
+    },
+    {
+      "selector": "page.locator('button, input[type=\"submit\"], input[type=\"button\"]').filter({ hasText: /^Create$/ })",
+      "confidence": 75,
+      "strategy": "locator"
+    }
+  ],
+  "taskMenuItem": [
+    {
+      "selector": "page.getByRole('menuitem', { name: 'Task', exact: true })",
+      "confidence": 96,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('#types-context-menu').getByRole('menuitem', { name: 'Task' })",
+      "confidence": 82,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('a').filter({ hasText: /^Task$/ })",
+      "confidence": 74,
+      "strategy": "locator"
+    }
+  ],
+  "subjectField": [
+    {
+      "selector": "page.getByRole('textbox', { name: 'Subject' })",
+      "confidence": 95,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.getByLabel('Subject', { exact: true })",
+      "confidence": 92,
+      "strategy": "label"
+    },
+    {
+      "selector": "page.locator('[role=\"form\"]').getByRole('textbox', { name: 'Subject' })",
+      "confidence": 88,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('#wp-new-inline-edit--field-subject')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "projectSearchCombobox": [
+    {
+      "selector": "page.getByRole('combobox', { name: 'Search', exact: true })",
+      "confidence": 96,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('[role=\"form\"]').getByRole('combobox', { name: 'Search' })",
+      "confidence": 88,
+      "strategy": "locator"
+    }
+  ],
+  "projectOption": [
+    {
+      "selector": "page.locator('#a67f7fc77000-2').locator('div')",
+      "confidence": 78,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('div').filter({ hasText: /^Demo project$/ })",
+      "confidence": 68,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('xpath=html/body/div[3]/ng-dropdown-panel/div/div[2]/div[3]/div')",
+      "confidence": 50,
+      "strategy": "xpath"
+    }
+  ],
+  "descriptionEditor": [
+    {
+      "selector": "page.getByRole('textbox', { name: /Rich Text Editor.../ })",
+      "confidence": 96,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('[role=\"form\"]').getByRole('textbox', { name: /Rich Text Editor.../ })",
+      "confidence": 88,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.locator('div.ck-blurred')",
+      "confidence": 78,
+      "strategy": "css"
+    }
+  ],
+  "saveButton": [
+    {
+      "selector": "page.getByRole('button', { name: 'Save' })",
+      "confidence": 95,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.getByText('Save')",
+      "confidence": 88,
+      "strategy": "text"
+    },
+    {
+      "selector": "page.locator('#work-packages--edit-actions-save')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "moreActionsButton": [
+    {
+      "selector": "page.locator('button.button.dropdown-relative')",
+      "confidence": 80,
+      "strategy": "css"
+    },
+    {
+      "selector": "page.locator('#action-show-more-dropdown-menu').locator('button')",
+      "confidence": 78,
+      "strategy": "locator"
+    }
+  ],
+  "deleteDialogButton": [
+    {
+      "selector": "page.locator('[role=\"dialog\"]').getByRole('button', { name: 'Delete' })",
+      "confidence": 95,
+      "strategy": "locator"
+    },
+    {
+      "selector": "page.getByRole('button', { name: 'Delete' })",
+      "confidence": 95,
+      "strategy": "role"
+    },
+    {
+      "selector": "page.locator('#wp_destroy_modal').getByRole('button', { name: 'Delete' })",
+      "confidence": 82,
+      "strategy": "locator"
+    }
+  ]
+}

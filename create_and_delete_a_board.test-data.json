@@ -1,0 +1,13 @@
+{
+  "variations": [
+    {
+      "boardName": "E2E Automated Test Board"
+    },
+    {
+      "boardName": "Project Phoenix Planning Board"
+    },
+    {
+      "boardName": "Sprint Alpha Workflow Board"
+    }
+  ]
+}

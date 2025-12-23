@@ -1,0 +1,32 @@
+{
+  "dev": {
+    "baseUrl": "https://community.openproject.org",
+    "baseHostUrl": "https://community.openproject.org",
+    "loginUrl": "https://community.openproject.org/login",
+    "loginHostUrl": "https://community.openproject.org",
+    "credentials": {
+      "username": "${UI_SITE_USERNAME}",
+      "password": "${UI_SITE_PASSWORD}"
+    }
+  },
+  "staging": {
+    "baseUrl": "https://staging.openproject.org",
+    "baseHostUrl": "https://staging.openproject.org",
+    "loginUrl": "https://staging.openproject.org/login",
+    "loginHostUrl": "https://staging.openproject.org",
+    "credentials": {
+      "username": "${UI_SITE_USERNAME}",
+      "password": "${UI_SITE_PASSWORD}"
+    }
+  },
+  "production": {
+    "baseUrl": "https://www.openproject.org",
+    "baseHostUrl": "https://www.openproject.org",
+    "loginUrl": "https://www.openproject.org/login",
+    "loginHostUrl": "https://www.openproject.org",
+    "credentials": {
+      "username": "${UI_SITE_USERNAME}",
+      "password": "${UI_SITE_PASSWORD}"
+    }
+  }
+}

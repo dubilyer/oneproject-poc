@@ -1,0 +1,83 @@
+{
+  "usernameField": [
+    {
+      "selector": "page.locator('form[action*=\"login\"]').getByRole('textbox', { name: 'Username' })",
+      "confidence": 97,
+      "strategy": "form_action_role"
+    },
+    {
+      "selector": "page.getByRole('textbox', { name: 'Username' })",
+      "confidence": 95,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.getByLabel('Username')",
+      "confidence": 93,
+      "strategy": "label_text"
+    },
+    {
+      "selector": "page.locator('input[type=\"text\"][name=\"username\"]')",
+      "confidence": 89,
+      "strategy": "css_combined"
+    },
+    {
+      "selector": "page.locator('#username')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "passwordField": [
+    {
+      "selector": "page.locator('form[action*=\"login\"]').getByRole('textbox', { name: 'Password' })",
+      "confidence": 97,
+      "strategy": "form_action_role"
+    },
+    {
+      "selector": "page.getByRole('textbox', { name: 'Password' })",
+      "confidence": 95,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.getByLabel('Password')",
+      "confidence": 93,
+      "strategy": "label_text"
+    },
+    {
+      "selector": "page.locator('input[type=\"password\"][name=\"password\"]')",
+      "confidence": 89,
+      "strategy": "css_combined"
+    },
+    {
+      "selector": "page.locator('#password')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "signInButton": [
+    {
+      "selector": "page.locator('form[action*=\"login\"]').getByRole('button', { name: /Sign in/ })",
+      "confidence": 97,
+      "strategy": "form_action_role_regex"
+    },
+    {
+      "selector": "page.getByRole('button', { name: /Sign in/ })",
+      "confidence": 95,
+      "strategy": "role_name_regex"
+    },
+    {
+      "selector": "page.locator('input[value=\"Sign in\"]')",
+      "confidence": 89,
+      "strategy": "css_tag_value"
+    },
+    {
+      "selector": "page.locator('input[data-controller=\"disable-when-clicked\"]')",
+      "confidence": 85,
+      "strategy": "data_attr_controller"
+    },
+    {
+      "selector": "page.locator('#login-form').getByRole('button', { name: 'Sign in' })",
+      "confidence": 82,
+      "strategy": "parent_id_role"
+    }
+  ]
+}

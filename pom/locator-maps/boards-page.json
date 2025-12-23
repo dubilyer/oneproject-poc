@@ -1,0 +1,156 @@
+{
+  "createNewBoardButton": [
+    {
+      "selector": "page.getByRole('link', { name: /Create new board/ })",
+      "confidence": 96,
+      "strategy": "aria_label_regex"
+    },
+    {
+      "selector": "page.getByRole('link', { name: /Create new board/ })",
+      "confidence": 95,
+      "strategy": "role_name_regex"
+    },
+    {
+      "selector": "page.locator('#content-body').getByRole('link', { name: 'Create new board' })",
+      "confidence": 82,
+      "strategy": "parent_id_role"
+    },
+    {
+      "selector": "page.locator('#add-board-button')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "titleField": [
+    {
+      "selector": "page.locator('form[action*=\"boards\"]').getByRole('textbox', { name: 'Title' })",
+      "confidence": 97,
+      "strategy": "form_action_role"
+    },
+    {
+      "selector": "page.locator('form#board-form').getByRole('textbox', { name: 'Title' })",
+      "confidence": 96,
+      "strategy": "form_id_role"
+    },
+    {
+      "selector": "page.getByRole('textbox', { name: 'Title' })",
+      "confidence": 95,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.getByLabel('Title')",
+      "confidence": 93,
+      "strategy": "label_text"
+    },
+    {
+      "selector": "page.locator('#boards_grid_name')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "projectSearchField": [
+    {
+      "selector": "page.locator('form[action*=\"boards\"]').getByRole('combobox', { name: 'Search' })",
+      "confidence": 98,
+      "strategy": "form_action_aria_role"
+    },
+    {
+      "selector": "page.locator('form#board-form').getByRole('combobox', { name: 'Search' })",
+      "confidence": 96,
+      "strategy": "form_id_role"
+    },
+    {
+      "selector": "page.getByRole('combobox', { name: 'Search' })",
+      "confidence": 95,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.locator('#project_id').getByRole('combobox', { name: 'Search' })",
+      "confidence": 82,
+      "strategy": "parent_id_role"
+    }
+  ],
+  "projectOption": [
+    {
+      "selector": "page.locator('[role=\"listbox\"]').getByRole('option', { name: 'Demo project' })",
+      "confidence": 98,
+      "strategy": "portal_role_name"
+    },
+    {
+      "selector": "page.getByRole('option', { name: /Demo project/ })",
+      "confidence": 95,
+      "strategy": "role_name_regex"
+    },
+    {
+      "selector": "page.getByText('Demo project')",
+      "confidence": 88,
+      "strategy": "text"
+    },
+    {
+      "selector": "page.locator('#a97ccf9aa3b8-0')",
+      "confidence": 75,
+      "strategy": "id"
+    }
+  ],
+  "createButton": [
+    {
+      "selector": "page.locator('form[action*=\"boards\"]').getByRole('button', { name: 'Create' })",
+      "confidence": 97,
+      "strategy": "form_action_role"
+    },
+    {
+      "selector": "page.locator('form#board-form').getByRole('button', { name: 'Create' })",
+      "confidence": 96,
+      "strategy": "form_id_role"
+    },
+    {
+      "selector": "page.getByRole('button', { name: 'Create' })",
+      "confidence": 95,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.locator('button.-primary.button')",
+      "confidence": 80,
+      "strategy": "css_combined_classes"
+    }
+  ],
+  "boardsLink": [
+    {
+      "selector": "page.locator('#menu-sidebar').getByRole('link', { name: 'Boards' })",
+      "confidence": 82,
+      "strategy": "parent_id_role"
+    },
+    {
+      "selector": "page.getByRole('link', { name: 'Boards' })",
+      "confidence": 85,
+      "strategy": "role_name"
+    },
+    {
+      "selector": "page.getByText('Boards')",
+      "confidence": 78,
+      "strategy": "text"
+    },
+    {
+      "selector": "page.locator('xpath=html/body/div[2]/div[1]/div[1]/div/ul/li[5]/div[2]/a[2]')",
+      "confidence": 50,
+      "strategy": "xpath"
+    }
+  ],
+  "deleteIcon": [
+    {
+      "selector": "page.locator('a.icon-delete[href*=\"/boards/58\"]')",
+      "confidence": 88,
+      "strategy": "css_class_href_combined"
+    },
+    {
+      "selector": "page.locator('a[href*=\"58\"]')",
+      "confidence": 79,
+      "strategy": "href_relative"
+    },
+    {
+      "selector": "page.locator('a[data-turbo-method=\"delete\"]')",
+      "confidence": 75,
+      "strategy": "data_attr_turbo-method"
+    }
+  ]
+}
