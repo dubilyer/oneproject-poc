@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { test } from '@playwright/test';
 import { LoginPage } from '../../pom/LoginPage.js';
 

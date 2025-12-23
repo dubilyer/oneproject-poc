@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
 
 /**
  * Page Object Model for the Work Packages page
@@ -7,7 +6,6 @@ import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
 export class WorkPackagesPage {
   constructor(page) {
     this.page = page;
-    this.environment = EnvironmentFactory.create();
     
     // Locators
     this.workPackagesLink = page.getByRole('link', { name: /Work packages/ });
@@ -25,8 +23,8 @@ export class WorkPackagesPage {
    * Navigate to work packages page
    */
   async navigate() {
-    await this.page.goto(`${this.environment.getBaseUrl() || this.environment.getBaseHostUrl()}`);
-    await this.page.waitForURL(new RegExp(this.environment.getBaseHostUrl()));
+    await this.page.goto(process.env.BASE_URL || process.env.BASE_HOST_URL);
+    await this.page.waitForURL(new RegExp(process.env.BASE_HOST_URL));
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -35,7 +33,7 @@ export class WorkPackagesPage {
    */
   async navigateToWorkPackages() {
     await this.workPackagesLink.click();
-    await this.page.waitForURL(`${this.environment.getBaseHostUrl()}/work_packages`);
+    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/work_packages`);
   }
 
   /**
@@ -50,7 +48,7 @@ export class WorkPackagesPage {
    */
   async selectTaskType() {
     await this.taskMenuItem.click();
-    await this.page.waitForURL(new RegExp(`${this.environment.getBaseHostUrl()}/work_packages/create_new`));
+    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages/create_new`));
   }
 
   /**
@@ -84,7 +82,7 @@ export class WorkPackagesPage {
    */
   async save() {
     await this.saveButton.click();
-    await this.page.waitForURL(new RegExp(`${this.environment.getBaseHostUrl()}/work_packages/details/\\d+/overview`));
+    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages/details/\\d+/overview`));
   }
 
   /**
@@ -98,7 +96,7 @@ export class WorkPackagesPage {
     await deleteDialog.waitFor({ state: 'visible' });
     await deleteDialog.getByRole('button', { name: 'Delete' }).click();
     
-    await this.page.waitForURL(new RegExp(`${this.environment.getBaseHostUrl()}/work_packages`));
+    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages`));
   }
 
   /**

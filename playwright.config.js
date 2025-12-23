@@ -15,7 +15,7 @@ import * as path from "path";
  */
 
 // Check if storage state file exists
-const storageStatePath = path.join(__dirname, '..', '.auth', 'storage-state.json');
+const storageStatePath = path.join(__dirname, '.auth', 'storage-state.json');
 const storageStateExists = fs.existsSync(storageStatePath);
 
 /**
@@ -29,7 +29,7 @@ const storageStateExists = fs.existsSync(storageStatePath);
  *
  * @returns {boolean} true if auth cookies are valid, false if expired/missing
  */
-function isStorageStateValid() {
+const isStorageStateValid = () => {
   if (!storageStateExists) {
     console.log('⚠️  Storage state file does not exist - login required');
     return false;
@@ -99,7 +99,7 @@ function isStorageStateValid() {
 const storageStateValid = isStorageStateValid();
 
 module.exports = defineConfig({
-  testDir: "./.",
+  testDir: "./tests",
   fullyParallel: false,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -126,7 +126,7 @@ module.exports = defineConfig({
     // ==========================================
     {
       name: 'login-test',
-      testMatch: /login_analysis.*\.spec\.js/,
+      testMatch: /tests\/web\/login\.spec\.js/,
       use: {
         ...devices["Desktop Chrome"],
         // No storageState - fresh browser for login
@@ -137,8 +137,8 @@ module.exports = defineConfig({
     // AUTHENTICATED TESTS - Need login (use storage state)
     // ==========================================
     {
-      name: 'chromium-authenticated',
-      testMatch: /.*\.auth\.spec\.js/,
+      name: 'web-tests',
+      testMatch: /tests\/web\/(board-management|work-package-management)\.spec\.js/,
       // Smart dependency: Only depend on login if storage state is invalid
       dependencies: storageStateValid ? [] : ['login-test'],
       use: {
@@ -149,14 +149,14 @@ module.exports = defineConfig({
     },
 
     // ==========================================
-    // UNAUTHENTICATED TESTS - Public pages (no login)
+    // API TESTS PROJECT
     // ==========================================
     {
-      name: 'chromium-noauth',
-      testMatch: /.*\.noauth\.spec\.js/,
+      name: 'api-tests',
+      testMatch: /tests\/api\/.*\.spec\.js/,
       use: {
         ...devices["Desktop Chrome"],
-        // No storageState - fresh browser for public pages
+        // API tests don't need browser context
       },
     },
 

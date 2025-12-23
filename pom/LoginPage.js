@@ -1,4 +1,4 @@
-import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
+import { expect } from '@playwright/test';
 
 /**
  * Page Object Model for the Login page
@@ -6,7 +6,6 @@ import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
 export class LoginPage {
   constructor(page) {
     this.page = page;
-    this.environment = EnvironmentFactory.create();
     
     // Locators
     this.usernameField = page.locator('form[action*="login"]').getByRole('textbox', { name: 'Username' });
@@ -18,8 +17,12 @@ export class LoginPage {
    * Navigate to the login page
    */
   async navigate() {
-    await this.page.goto(this.environment.getLoginUrl() || this.environment.getBaseUrl());
-    await this.page.waitForURL(this.environment.getLoginUrl() || this.environment.getBaseUrl());
+    const loginUrl = process.env.LOGIN_URL || process.env.BASE_URL;
+    await this.page.goto(loginUrl);
+    await expect(this.page).toHaveURL(loginUrl);
+    
+    // Wait for the login form to be ready
+    await this.usernameField.waitFor({ state: 'visible' });
   }
 
   /**
@@ -27,6 +30,7 @@ export class LoginPage {
    * @param {string} username - The username to enter
    */
   async fillUsername(username) {
+    await this.usernameField.waitFor({ state: 'visible' });
     await this.usernameField.fill(username);
   }
 
@@ -52,12 +56,12 @@ export class LoginPage {
    */
   async login(username = null, password = null) {
     await this.navigate();
-    await this.fillUsername(username || this.environment.getUsername());
-    await this.fillPassword(password || this.environment.getPassword());
+    await this.fillUsername(username || process.env.UI_SITE_USERNAME);
+    await this.fillPassword(password || process.env.UI_SITE_PASSWORD);
     await this.clickSignIn();
     
     // Wait for successful login
-    const expectedUrl = new RegExp(`^${this.environment.getLoginHostUrl() || this.environment.getBaseHostUrl()}/?$`);
+    const expectedUrl = new RegExp(`^${process.env.LOGIN_HOST_URL || process.env.BASE_HOST_URL}/?$`);
     await this.page.waitForURL(expectedUrl, { timeout: 30000 });
   }
 
@@ -67,6 +71,6 @@ export class LoginPage {
    */
   async saveAuthState(context) {
     await this.page.waitForLoadState('networkidle');
-    await context.storageState({ path: '../.auth/storage-state.json' });
+    await context.storageState({ path: '.auth/storage-state.json' });
   }
 }

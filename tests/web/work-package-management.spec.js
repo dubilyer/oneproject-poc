@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { test } from '@playwright/test';
 import { WorkPackagesPage } from '../../pom/WorkPackagesPage.js';
 import { WorkPackageDataFactory } from '../../data/WorkPackageDataFactory.js';

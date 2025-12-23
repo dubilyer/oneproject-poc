@@ -1,0 +1,78 @@
+name: Playwright Test Runner
+
+on:
+  schedule:
+    # Run every day at 8:00 AM UTC
+    - cron: '0 8 * * *'
+  workflow_dispatch:
+    inputs:
+      project:
+        description: 'Project name to run tests for'
+        required: true
+        default: 'web'
+        type: choice
+        options:
+          - web
+          - api
+      environment:
+        description: 'Environment to run tests against'
+        required: true
+        default: 'dev'
+        type: choice
+        options:
+          - dev
+          - staging
+          - production
+
+jobs:
+  test:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    env:
+      BASE_HOST_URL: ${{ secrets.BASE_HOST_URL || 'https://roost.openproject.com' }}
+      BASE_URL: ${{ secrets.BASE_URL || 'https://roost.openproject.com' }}
+      LOGIN_HOST_URL: ${{ secrets.LOGIN_HOST_URL || 'https://roost.openproject.com' }}
+      LOGIN_URL: ${{ secrets.LOGIN_URL || 'https://roost.openproject.com/login' }}
+      UI_SITE_USERNAME: ${{ secrets.UI_SITE_USERNAME }}
+      UI_SITE_PASSWORD: ${{ secrets.UI_SITE_PASSWORD }}
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - uses: actions/setup-node@v4
+      with:
+        node-version: '24'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Install Playwright Browsers
+      run: npx playwright install --with-deps
+    
+    - name: Create auth directory
+      run: mkdir -p .auth
+    
+    - name: Run tests
+      run: |
+        if [[ "${{ github.event.inputs.project || 'web' }}" == "web" ]]; then
+          npx playwright test tests/web/
+        elif [[ "${{ github.event.inputs.project || 'web' }}" == "api" ]]; then
+          npx playwright test tests/api/
+        else
+          npx playwright test
+        fi
+    
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: playwright-report-${{ github.event.inputs.project || 'web' }}-${{ github.event.inputs.environment || 'dev' }}
+        path: playwright-report/
+        retention-days: 30
+    
+    - uses: actions/upload-artifact@v4
+      if: ${{ !cancelled() }}
+      with:
+        name: test-results-${{ github.event.inputs.project || 'web' }}-${{ github.event.inputs.environment || 'dev' }}
+        path: test-results/
+        retention-days: 30

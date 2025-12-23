@@ -1,5 +1,4 @@
 import { expect } from '@playwright/test';
-import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
 
 /**
  * Page Object Model for the Boards page
@@ -7,7 +6,6 @@ import { EnvironmentFactory } from '../config/env/EnvironmentFactory.js';
 export class BoardsPage {
   constructor(page) {
     this.page = page;
-    this.environment = EnvironmentFactory.create();
     
     // Locators
     this.createNewBoardButton = page.getByRole('link', { name: /Create new board/ });
@@ -21,8 +19,8 @@ export class BoardsPage {
    * Navigate to the boards page
    */
   async navigate() {
-    await this.page.goto(`${this.environment.getBaseHostUrl()}/boards`);
-    await this.page.waitForURL(`${this.environment.getBaseHostUrl()}/boards`);
+    await this.page.goto(`${process.env.BASE_HOST_URL}/boards`);
+    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/boards`);
   }
 
   /**
@@ -30,7 +28,7 @@ export class BoardsPage {
    */
   async clickCreateNewBoard() {
     await this.createNewBoardButton.first().click();
-    await this.page.waitForURL(`${this.environment.getBaseHostUrl()}/boards/new`);
+    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/boards/new`);
   }
 
   /**
@@ -55,7 +53,7 @@ export class BoardsPage {
    */
   async clickCreate() {
     await this.createButton.click();
-    await this.page.waitForURL(new RegExp(`${this.environment.getBaseHostUrl()}/projects/demo-project/boards/\\d+`));
+    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/projects/demo-project/boards/\\d+`));
   }
 
   /**
@@ -63,7 +61,7 @@ export class BoardsPage {
    */
   async navigateToBoards() {
     await this.boardsLink.click();
-    await this.page.waitForURL(`${this.environment.getBaseHostUrl()}/projects/demo-project/boards`);
+    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/projects/demo-project/boards`);
   }
 
   /**

@@ -1,3 +1,4 @@
+import 'dotenv/config';
 import { test } from '@playwright/test';
 import { BoardsPage } from '../../pom/BoardsPage.js';
 import { BoardDataFactory } from '../../data/BoardDataFactory.js';
