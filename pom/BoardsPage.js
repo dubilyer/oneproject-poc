@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { EnvironmentValidator } from '../utils/EnvironmentValidator.js';
 
 /**
  * Page Object Model for the Boards page
@@ -6,6 +7,9 @@ import { expect } from '@playwright/test';
 export class BoardsPage {
   constructor(page) {
     this.page = page;
+    
+    // Validate environment on construction
+    EnvironmentValidator.validateEnvironment();
     
     // Locators
     this.createNewBoardButton = page.getByRole('link', { name: /Create new board/ });
@@ -19,8 +23,9 @@ export class BoardsPage {
    * Navigate to the boards page
    */
   async navigate() {
-    await this.page.goto(`${process.env.BASE_HOST_URL}/boards`);
-    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/boards`);
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.goto(`${baseHostUrl}/boards`);
+    await this.page.waitForURL(`${baseHostUrl}/boards`);
   }
 
   /**
@@ -28,7 +33,8 @@ export class BoardsPage {
    */
   async clickCreateNewBoard() {
     await this.createNewBoardButton.first().click();
-    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/boards/new`);
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(`${baseHostUrl}/boards/new`);
   }
 
   /**
@@ -36,7 +42,8 @@ export class BoardsPage {
    * @param {string} title - The board title
    */
   async fillTitle(title) {
-    await this.titleField.fill(title);
+    const sanitizedTitle = EnvironmentValidator.sanitizeValue(title);
+    await this.titleField.fill(sanitizedTitle);
   }
 
   /**
@@ -44,8 +51,9 @@ export class BoardsPage {
    * @param {string} projectName - The project name to search and select
    */
   async selectProject(projectName) {
-    await this.projectSearchField.fill(projectName);
-    await this.page.locator('[role="listbox"]').getByRole('option', { name: projectName }).click();
+    const sanitizedProjectName = EnvironmentValidator.sanitizeValue(projectName);
+    await this.projectSearchField.fill(sanitizedProjectName);
+    await this.page.locator('[role="listbox"]').getByRole('option', { name: sanitizedProjectName }).click();
   }
 
   /**
@@ -53,7 +61,8 @@ export class BoardsPage {
    */
   async clickCreate() {
     await this.createButton.click();
-    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/projects/demo-project/boards/\\d+`));
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(new RegExp(`${baseHostUrl}/projects/demo-project/boards/\\d+`));
   }
 
   /**
@@ -61,7 +70,8 @@ export class BoardsPage {
    */
   async navigateToBoards() {
     await this.boardsLink.click();
-    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/projects/demo-project/boards`);
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(`${baseHostUrl}/projects/demo-project/boards`);
   }
 
   /**
@@ -73,7 +83,8 @@ export class BoardsPage {
     this.page.on('dialog', dialog => dialog.accept());
     
     // Find the board row and click delete
-    const boardRow = this.page.locator('tr').filter({ hasText: boardName });
+    const sanitizedBoardName = EnvironmentValidator.sanitizeValue(boardName);
+    const boardRow = this.page.locator('tr').filter({ hasText: sanitizedBoardName });
     await boardRow.locator('a.icon-delete').click();
     await this.page.waitForLoadState('networkidle');
   }
@@ -83,7 +94,8 @@ export class BoardsPage {
    * @param {string} boardName - The name of the board to verify is hidden
    */
   async verifyBoardNotVisible(boardName) {
-    await expect(this.page.getByText(boardName, { exact: true })).toBeHidden();
+    const sanitizedBoardName = EnvironmentValidator.sanitizeValue(boardName);
+    await expect(this.page.getByText(sanitizedBoardName, { exact: true })).toBeHidden();
   }
 
   /**

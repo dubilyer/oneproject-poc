@@ -1,4 +1,6 @@
 import { expect } from '@playwright/test';
+import { EnvironmentValidator } from '../utils/EnvironmentValidator.js';
+import { PathSanitizer } from '../utils/PathSanitizer.js';
 
 /**
  * Page Object Model for the Login page
@@ -6,6 +8,9 @@ import { expect } from '@playwright/test';
 export class LoginPage {
   constructor(page) {
     this.page = page;
+    
+    // Validate environment on construction
+    EnvironmentValidator.validateEnvironment();
     
     // Locators
     this.usernameField = page.locator('form[action*="login"]').getByRole('textbox', { name: 'Username' });
@@ -17,7 +22,7 @@ export class LoginPage {
    * Navigate to the login page
    */
   async navigate() {
-    const loginUrl = process.env.LOGIN_URL || process.env.BASE_URL;
+    const loginUrl = EnvironmentValidator.getVar('LOGIN_URL') || EnvironmentValidator.getVar('BASE_URL');
     await this.page.goto(loginUrl);
     await expect(this.page).toHaveURL(loginUrl);
     
@@ -31,7 +36,8 @@ export class LoginPage {
    */
   async fillUsername(username) {
     await this.usernameField.waitFor({ state: 'visible' });
-    await this.usernameField.fill(username);
+    const sanitizedUsername = EnvironmentValidator.sanitizeCredential(username);
+    await this.usernameField.fill(sanitizedUsername);
   }
 
   /**
@@ -39,7 +45,8 @@ export class LoginPage {
    * @param {string} password - The password to enter
    */
   async fillPassword(password) {
-    await this.passwordField.fill(password);
+    const sanitizedPassword = EnvironmentValidator.sanitizeCredential(password);
+    await this.passwordField.fill(sanitizedPassword);
   }
 
   /**
@@ -56,12 +63,17 @@ export class LoginPage {
    */
   async login(username = null, password = null) {
     await this.navigate();
-    await this.fillUsername(username || process.env.UI_SITE_USERNAME);
-    await this.fillPassword(password || process.env.UI_SITE_PASSWORD);
+    
+    const safeUsername = username || EnvironmentValidator.getVar('UI_SITE_USERNAME');
+    const safePassword = password || EnvironmentValidator.getVar('UI_SITE_PASSWORD');
+    
+    await this.fillUsername(safeUsername);
+    await this.fillPassword(safePassword);
     await this.clickSignIn();
     
     // Wait for successful login
-    const expectedUrl = new RegExp(`^${process.env.LOGIN_HOST_URL || process.env.BASE_HOST_URL}/?$`);
+    const loginHostUrl = EnvironmentValidator.getVar('LOGIN_HOST_URL') || EnvironmentValidator.getVar('BASE_HOST_URL');
+    const expectedUrl = new RegExp(`^${loginHostUrl}/?$`);
     await this.page.waitForURL(expectedUrl, { timeout: 30000 });
   }
 
@@ -71,6 +83,7 @@ export class LoginPage {
    */
   async saveAuthState(context) {
     await this.page.waitForLoadState('networkidle');
-    await context.storageState({ path: '.auth/storage-state.json' });
+    const safePath = PathSanitizer.getStorageStatePath();
+    await context.storageState({ path: safePath });
   }
 }

@@ -1,4 +1,5 @@
 import { expect } from '@playwright/test';
+import { EnvironmentValidator } from '../utils/EnvironmentValidator.js';
 
 /**
  * Page Object Model for the Work Packages page
@@ -6,6 +7,9 @@ import { expect } from '@playwright/test';
 export class WorkPackagesPage {
   constructor(page) {
     this.page = page;
+    
+    // Validate environment on construction
+    EnvironmentValidator.validateEnvironment();
     
     // Locators
     this.workPackagesLink = page.getByRole('link', { name: /Work packages/ });
@@ -23,8 +27,11 @@ export class WorkPackagesPage {
    * Navigate to work packages page
    */
   async navigate() {
-    await this.page.goto(process.env.BASE_URL || process.env.BASE_HOST_URL);
-    await this.page.waitForURL(new RegExp(process.env.BASE_HOST_URL));
+    const baseUrl = EnvironmentValidator.getVar('BASE_URL') || EnvironmentValidator.getVar('BASE_HOST_URL');
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    
+    await this.page.goto(baseUrl);
+    await this.page.waitForURL(new RegExp(baseHostUrl));
     await this.page.waitForLoadState('networkidle');
   }
 
@@ -33,7 +40,8 @@ export class WorkPackagesPage {
    */
   async navigateToWorkPackages() {
     await this.workPackagesLink.click();
-    await this.page.waitForURL(`${process.env.BASE_HOST_URL}/work_packages`);
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(`${baseHostUrl}/work_packages`);
   }
 
   /**
@@ -48,7 +56,8 @@ export class WorkPackagesPage {
    */
   async selectTaskType() {
     await this.taskMenuItem.click();
-    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages/create_new`));
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(new RegExp(`${baseHostUrl}/work_packages/create_new`));
   }
 
   /**
@@ -56,7 +65,8 @@ export class WorkPackagesPage {
    * @param {string} subject - The task subject
    */
   async fillSubject(subject) {
-    await this.subjectField.fill(subject);
+    const sanitizedSubject = EnvironmentValidator.sanitizeValue(subject);
+    await this.subjectField.fill(sanitizedSubject);
   }
 
   /**
@@ -64,8 +74,9 @@ export class WorkPackagesPage {
    * @param {string} projectName - The project name to select
    */
   async selectProject(projectName) {
+    const sanitizedProjectName = EnvironmentValidator.sanitizeValue(projectName);
     await this.projectSearchCombobox.click();
-    await this.page.getByRole('option', { name: projectName }).click();
+    await this.page.getByRole('option', { name: sanitizedProjectName }).click();
   }
 
   /**
@@ -73,8 +84,9 @@ export class WorkPackagesPage {
    * @param {string} description - The task description
    */
   async fillDescription(description) {
+    const sanitizedDescription = EnvironmentValidator.sanitizeValue(description);
     await this.descriptionEditor.click();
-    await this.descriptionEditor.fill(description);
+    await this.descriptionEditor.fill(sanitizedDescription);
   }
 
   /**
@@ -82,7 +94,8 @@ export class WorkPackagesPage {
    */
   async save() {
     await this.saveButton.click();
-    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages/details/\\d+/overview`));
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(new RegExp(`${baseHostUrl}/work_packages/details/\\d+/overview`));
   }
 
   /**
@@ -96,7 +109,8 @@ export class WorkPackagesPage {
     await deleteDialog.waitFor({ state: 'visible' });
     await deleteDialog.getByRole('button', { name: 'Delete' }).click();
     
-    await this.page.waitForURL(new RegExp(`${process.env.BASE_HOST_URL}/work_packages`));
+    const baseHostUrl = EnvironmentValidator.getVar('BASE_HOST_URL');
+    await this.page.waitForURL(new RegExp(`${baseHostUrl}/work_packages`));
   }
 
   /**
@@ -104,7 +118,8 @@ export class WorkPackagesPage {
    * @param {string} subject - The subject to verify
    */
   async verifyTaskVisible(subject) {
-    await expect(this.page.getByText(subject).first()).toBeVisible();
+    const sanitizedSubject = EnvironmentValidator.sanitizeValue(subject);
+    await expect(this.page.getByText(sanitizedSubject).first()).toBeVisible();
   }
 
   /**
@@ -113,7 +128,8 @@ export class WorkPackagesPage {
    */
   async verifyTaskNotVisible(subject) {
     await this.page.waitForLoadState('networkidle');
-    await expect(this.page.getByText(new RegExp(`${subject} #\\d+`))).not.toBeVisible();
+    const sanitizedSubject = EnvironmentValidator.sanitizeValue(subject);
+    await expect(this.page.getByText(new RegExp(`${sanitizedSubject} #\\d+`))).not.toBeVisible();
   }
 
   /**
